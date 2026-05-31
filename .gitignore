@@ -1,0 +1,64 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Environment
+.env
+.env.local
+
+# Runtime artifacts (data cache, trained models, reports, logs)
+artifacts/
+
+# Editors and OS
+.idea/
+.vscode/
+.DS_Store
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# AI assistants and IDE companions
+.claude/
+.codex/
+.cursor/
+.cursor-tutor/
+
+# More Python
+*.so
+*.dylib
+build/
+dist/
+.python-version
+pip-log.txt
+
+# Type checker caches
+.mypy_cache/
+.ruff_cache/
+.pyright/
+.pytype/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# macOS extras
+._*
+.AppleDouble
+.LSOverride
+Icon
+
+# Editor backups and swap files
+*.swp
+*.swo
+*~
+*.iml

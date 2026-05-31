@@ -1,0 +1,93 @@
+# LSTM stock strategy configuration.
+# All paths in this file are resolved relative to the project root.
+
+project:
+  random_seed: 42
+  log_level: INFO
+
+data:
+  # Tickers to download and (per ticker) train a model for.
+  tickers:
+    - AAPL
+    - MSFT
+    - SPY
+  # ISO 8601 dates. yfinance accepts these directly.
+  start_date: 2015-01-01
+  end_date: 2025-12-31
+  cache_dir: artifacts/data_cache
+  source: yfinance
+  # When true, prices are split and dividend adjusted.
+  auto_adjust: true
+
+features:
+  # Order matters; the pipeline applies these in sequence.
+  # Add or remove entries to change which features are used.
+  enabled:
+    - log_return
+    - sma_10
+    - sma_30
+    - rsi_14
+    - volatility_20
+    - volume_change
+  # Reserved for future indicators that need parameters beyond a window.
+  # Current indicators encode their window inside the name, for example sma_10.
+  params: {}
+
+target:
+  # Up vs down classification on the next day log return.
+  type: classification
+  horizon_days: 1
+  # Label is 1 when next day log return is strictly greater than this value.
+  up_threshold: 0.0
+
+dataset:
+  lookback_window: 30
+  train_fraction: 0.70
+  val_fraction: 0.15
+  test_fraction: 0.15
+  # Shuffles batches inside the training set only.
+  # Never shuffles across the train, val, or test boundaries.
+  shuffle_train_batches: true
+
+model:
+  type: lstm
+  layers:
+    - units: 64
+      dropout: 0.2
+      return_sequences: true
+    - units: 32
+      dropout: 0.2
+      return_sequences: false
+  dense_units: 16
+  # Classification head.
+  output_activation: sigmoid
+  loss: binary_crossentropy
+  optimizer: adam
+  learning_rate: 0.001
+
+training:
+  epochs: 50
+  batch_size: 64
+  early_stopping_patience: 8
+  models_dir: artifacts/models
+
+backtest:
+  signal:
+    # Buy when the model says P(up) is above this value.
+    buy_threshold: 0.55
+    # Sell when the model says P(up) is below this value.
+    sell_threshold: 0.45
+  costs:
+    # Basis points charged per executed trade.
+    commission_bps: 1.0
+    # Modeled price slippage in basis points.
+    slippage_bps: 4.0
+  initial_cash: 100000.0
+  reports_dir: artifacts/reports
+
+paper_trade:
+  # Which ticker to trade live in the paper account. Start with one.
+  poll_ticker: AAPL
+  # Fraction of buying power to allocate when a buy signal fires.
+  cash_allocation_fraction: 1.0
+  logs_dir: artifacts/logs
