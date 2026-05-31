@@ -102,3 +102,21 @@ inputs:
    forward `horizon` days and is the supervised target by design.
 
 `pytest tests/` asserts each of these.
+
+## Disclaimer
+
+This project is provided for educational and research purposes only. It is
+not financial advice. Nothing in this repository constitutes a recommendation
+to buy, sell, or hold any security. Past performance, including backtest
+results, does not guarantee or imply future performance. Trading any market
+involves a real risk of loss, and you are solely responsible for any decisions
+you make with this code or its outputs.
+
+The Alpaca integration is wired to the paper trading endpoint only. The code
+forces `paper=True` and never imports the live trading URL. Do not modify
+that without first understanding the risks of running an unproven model
+against a real brokerage account.
+
+## License
+
+Released under the MIT License. See [LICENSE](LICENSE) for the full text.
